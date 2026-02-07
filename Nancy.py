@@ -25,6 +25,12 @@ recycle_bin = pygame.image.load("recycle.webp").convert()
 recycle_bin.set_colorkey((255, 255, 255))
 recycle_bin = pygame.transform.scale(recycle_bin, (180, 200))
 
+# category
+recycle_trash = ["coke_can.jpg", "water_bottle.jpg"]
+kitchen_trash = ["apple.jpg", "used_tissue.jpg", "abp.jpg"]
+hazardous_trash = ["battery.jpg", "chargers.jpg", "computer_screen.jpg", "paint,jpg"]
+landfill_trash = ["candy.wrap.jpg", "plastic_bag.jpg", "clothing.jpg"]
+
 # trash images
 trash = ["apple.jpg"]
 trash_index = random.randint(0, 0)
@@ -37,12 +43,6 @@ trash = pygame.transform.scale(trash, (60, 60))
 trash_x = random.randint(0, bg_width - 60)
 trash_y = -60
 trash_speed = 4
-
-# category
-recycle_trash = ["coke_can.jpg", "water_bottle.jpg"]
-kitchen_trash = ["apple.jpg", "used_tissue.jpg", "abp.jpg"]
-hazardous_trash = ["battery.jpg", "chargers.jpg", "computer_screen.jpg", "paint,jpg"]
-landfill_trash = ["candy.wrap.jpg", "plastic_bag.jpg", "clothing.jpg"]
 
 # other
 holding_trash = False
