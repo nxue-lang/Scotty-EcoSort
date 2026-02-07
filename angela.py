@@ -22,7 +22,6 @@ def lose_blood(life_state, score, ui, reset_args):
 
     return life_state, "continue", None
 
-
 def game_over_page(score, ui):
     screen = ui["screen"]
     background = ui["background"]
@@ -75,7 +74,6 @@ def game_over_page(score, ui):
 
         pygame.display.update()
         clock.tick(60)
-
 
 def reset_game(reset_args):
     bg_width = reset_args["bg_width"]
