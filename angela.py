@@ -89,15 +89,16 @@ def reset_game(reset_args):
     holding_trash = False
 
     # reset trash
-    image_name, trash, trash_x, trash_y = spawn_trash()
+    image_name, trash, trash_x, trash_y, trash_dx = spawn_trash()
 
     return {
-        "x": x,
-        "y": y,
-        "score": score,
-        "holding_trash": holding_trash,
-        "image_name": image_name,
-        "trash": trash,
-        "trash_x": trash_x,
-        "trash_y": trash_y,
-    }
+    "x": x,
+    "y": y,
+    "score": score,
+    "holding_trash": holding_trash,
+    "image_name": image_name,
+    "trash": trash,
+    "trash_x": trash_x,
+    "trash_y": trash_y,
+    "trash_dx": trash_dx,
+}

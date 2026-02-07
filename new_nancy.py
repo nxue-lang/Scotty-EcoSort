@@ -113,6 +113,7 @@ def apply_damage_and_handle(score, life_state, ui, reset_args,
         trash = payload["trash"]
         trash_x = payload["trash_x"]
         trash_y = payload["trash_y"]
+        trash_dx = payload["trash_dx"]
         return life_state, "restart", x, y, holding_trash, score, image_name, trash, trash_x, trash_y
 
     return life_state, "continue", x, y, holding_trash, score, image_name, trash, trash_x, trash_y
@@ -174,7 +175,7 @@ while True:
             continue
 
         # continue normally
-        image_name, trash, trash_x, trash_y, trast_dx = spawn_trash()
+        image_name, trash, trash_x, trash_y, trash_dx = spawn_trash()
 
     
     # rectangle for collision
