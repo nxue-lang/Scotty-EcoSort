@@ -17,29 +17,32 @@ scotty = pygame.transform.scale(scotty, (200, 150))
 #scotty parameters
 x = bg_width // 2
 y = bg_height // 2
-speed = 5
+speed = 7
 
 # recycle bin image
 recycle_bin = pygame.image.load("recycle_bin.webp")
 recycle_bin = pygame.transform.scale(recycle_bin, (180, 200))
 
 # category
-recycle_trash = ["coke_can.jpg", "water_bottle.jpg"]
-kitchen_trash = ["apple.jpg", "used_tissue.jpg", "abp.jpg"]
-hazardous_trash = ["battery.jpg", "chargers.jpg", "computer_screen.jpg", "paint,jpg"]
-landfill_trash = ["candy.wrap.jpg", "plastic_bag.jpg", "clothing.jpg"]
+recycle_trash = ["SodaCan.jpg", "WaterBottle.jpg"]
+kitchen_trash = ["apple.jpg", "used_tissue.jpg", "banana_peel.webp"]
+#hazardous_trash = ["battery.jpg", "chargers.jpg", "computer_screen.jpg", "paint,jpg"]
+landfill_trash = ["CandyWrapper.jpg", "PlasticBag.jpg", "clothing.jpg", "ChipBag.jpg", "used_gloves.webp"]
 
-# trash images
-trash = recycle_bin + kitchen_trash + hazardous_trash + landfill_trash
-trash_index = random.randint(0, 0)
-trash_image = trash[trash_index]
-trash = pygame.image.load(trash_image)
-trash = pygame.transform.scale(trash, (60, 60))
+trash_list = recycle_trash + kitchen_trash + landfill_trash
+
+# spawn random trash and location
+def spawn_trash():
+    image_name = random.choice(trash_list)
+    img = pygame.image.load(image_name)
+    img = pygame.transform.scale(img, (100, 100))
+    x = random.randint(0, bg_width - 60)
+    y = -60
+    return img, x, y
 
 # trash parameters
-trash_x = random.randint(0, bg_width - 60)
-trash_y = -60
-trash_speed = 4
+trash, trash_x, trash_y = spawn_trash()
+trash_speed = 5
 
 # other
 holding_trash = False
@@ -72,8 +75,7 @@ while True:
 
     # reset if missed
     if trash_y > bg_height:
-        trash_x = random.randint(0, bg_width - 60)
-        trash_y = -60
+        trash, trash_x, trash_y = spawn_trash()
     
     # rectangle for collision
     scotty_rect = pygame.Rect(x, y, 200, 150)
@@ -93,13 +95,12 @@ while True:
         if scotty_rect.colliderect(recycle_bin_rect):
             score += 1
             holding_trash = False
-            trash_x = random.randint(0, bg_width - 60)
-            trash_y = -60
+            trash, trash_x, trash_y = spawn_trash()
 
     # draw everything
     screen.blit(background, (0, 0))
     screen.blit(scotty, (x, y))
-    screen.blit(recycle_bin, (320, 250))
+    screen.blit(recycle_bin, (320, 270))
     screen.blit(trash, (trash_x, trash_y))
 
     # draw score
@@ -107,4 +108,4 @@ while True:
     screen.blit(score_text, (20, 20))
     
     pygame.display.update()
-    clock.tick(60)
+    #clock.tick(60)
