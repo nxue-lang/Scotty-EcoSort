@@ -14,7 +14,8 @@ pygame.display.set_caption("Garbage Classification")
 
 # scotty dog image
 scotty = pygame.image.load("scotty.webp")
-scotty = pygame.transform.scale(scotty, (200, 150))
+scotty_width, scotty_height = 200, 150
+scotty = pygame.transform.scale(scotty, (scotty_width, scotty_height))
 
 #scotty parameters
 x = bg_width // 2
@@ -142,13 +143,13 @@ while True:
         life_state["invuln_frames"] -= 1
 
     if keys[pygame.K_w]:
-        y -= speed
+        y = max(0, y - speed)
     if keys[pygame.K_s]:
-        y += speed
+        y = min(bg_height - scotty_height, y + speed)
     if keys[pygame.K_a]:
-        x -= speed
+        x = max(0, x - speed)
     if keys[pygame.K_d]:
-        x += speed
+        x = min(bg_width - scotty_width, x + speed)
 
     #trash falls
     if not holding_trash:
