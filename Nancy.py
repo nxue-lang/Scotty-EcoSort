@@ -30,7 +30,7 @@ hazardous_trash = ["battery.jpg", "chargers.jpg", "computer_screen.jpg", "paint,
 landfill_trash = ["candy.wrap.jpg", "plastic_bag.jpg", "clothing.jpg"]
 
 # trash images
-trash = ["apple.jpg"]
+trash = recycle_bin + kitchen_trash + hazardous_trash + landfill_trash
 trash_index = random.randint(0, 0)
 trash_image = trash[trash_index]
 trash = pygame.image.load(trash_image)
