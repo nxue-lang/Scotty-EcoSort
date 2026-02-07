@@ -169,7 +169,7 @@ while True:
             trash_y = payload["trash_y"]
             continue
 
-    # continue normally
+        # continue normally
         image_name, trash, trash_x, trash_y = spawn_trash()
 
     
