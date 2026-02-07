@@ -11,8 +11,7 @@ screen = pygame.display.set_mode((bg_width, bg_height))
 pygame.display.set_caption("Garbage Classification")
 
 # scotty dog image
-scotty = pygame.image.load("scotty.webp").convert()
-scotty.set_colorkey((255, 255, 255))
+scotty = pygame.image.load("scotty.webp")
 scotty = pygame.transform.scale(scotty, (200, 150))
 
 #scotty parameters
@@ -21,8 +20,7 @@ y = bg_height // 2
 speed = 5
 
 # recycle bin image
-recycle_bin = pygame.image.load("recycle.webp").convert()
-recycle_bin.set_colorkey((255, 255, 255))
+recycle_bin = pygame.image.load("recycle_bin.webp")
 recycle_bin = pygame.transform.scale(recycle_bin, (180, 200))
 
 # category
@@ -35,8 +33,7 @@ landfill_trash = ["candy.wrap.jpg", "plastic_bag.jpg", "clothing.jpg"]
 trash = ["apple.jpg"]
 trash_index = random.randint(0, 0)
 trash_image = trash[trash_index]
-trash = pygame.image.load(trash_image).convert()
-trash.set_colorkey((255, 255, 255))
+trash = pygame.image.load(trash_image)
 trash = pygame.transform.scale(trash, (60, 60))
 
 # trash parameters
