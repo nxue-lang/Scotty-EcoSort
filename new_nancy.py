@@ -122,10 +122,10 @@ def apply_damage_and_handle(score, life_state, ui, reset_args,
 
 # position of bins
 ground_y = bg_height - 40
-recycle_x = 320
-hazardous_x = 560
-compost_x = 760
-landfill_x = 980
+recycle_x = 200
+hazardous_x = 600
+compost_x = 900
+landfill_x = 1200
 
 recycle_y = ground_y - recycle_height
 hazardous_y = ground_y - hazardous_height - 10
@@ -180,12 +180,12 @@ while True:
 
     
     # rectangle for collision
-    scotty_rect = pygame.Rect(x, y, 120, 80)
-    trash_rect = pygame.Rect(trash_x, trash_y, 30, 30)
-    recycle_bin_rect = pygame.Rect(recycle_x, recycle_y, recycle_width, recycle_height)
-    hazardous_bin_rect = pygame.Rect(hazardous_x, hazardous_y, hazardous_width, hazardous_height)
-    compost_bin_rect = pygame.Rect(compost_x, compost_y, compost_width, compost_height)
-    landfill_bin_rect = pygame.Rect(landfill_x, landfill_y, landfill_width, landfill_height)
+    scotty_rect = pygame.Rect(x + 40, y + 40, 120, 80)
+    trash_rect = pygame.Rect(trash_x + 10, trash_y + 10, 40, 40)
+    recycle_bin_rect = pygame.Rect(recycle_x + 40, recycle_y + 40, recycle_width - 80, 60)
+    hazardous_bin_rect = pygame.Rect(hazardous_x + 30, hazardous_y + 40, hazardous_width - 60, 60)
+    compost_bin_rect = pygame.Rect(compost_x + 40, compost_y + 50, compost_width - 80, 60)
+    landfill_bin_rect = pygame.Rect(landfill_x + 40, landfill_y + 50, landfill_width - 80, 60)
 
     # pick up trash
     if scotty_rect.colliderect(trash_rect):
