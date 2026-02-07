@@ -11,8 +11,7 @@ screen = pygame.display.set_mode((bg_width, bg_height))
 pygame.display.set_caption("Garbage Classification")
 
 # scotty dog image
-scotty = pygame.image.load("scotty.webp").convert()
-scotty.set_colorkey((255, 255, 255))
+scotty = pygame.image.load("scotty.webp")
 scotty = pygame.transform.scale(scotty, (200, 150))
 
 #scotty parameters
@@ -21,15 +20,20 @@ y = bg_height // 2
 speed = 5
 
 # recycle bin image
-recycle = pygame.image.load("recycle.webp").convert()
-recycle.set_colorkey((255, 255, 255))
-recycle = pygame.transform.scale(recycle, (200, 250))
+recycle_bin = pygame.image.load("recycle_bin.webp")
+recycle_bin = pygame.transform.scale(recycle_bin, (180, 200))
+
+# category
+recycle_trash = ["coke_can.jpg", "water_bottle.jpg"]
+kitchen_trash = ["apple.jpg", "used_tissue.jpg", "abp.jpg"]
+hazardous_trash = ["battery.jpg", "chargers.jpg", "computer_screen.jpg", "paint,jpg"]
+landfill_trash = ["candy.wrap.jpg", "plastic_bag.jpg", "clothing.jpg"]
 
 # trash images
 trash = ["apple.jpg"]
-index = random.randint(0, 0)
-trash = pygame.image.load(trash[index]).convert()
-trash.set_colorkey((255, 255, 255))
+trash_index = random.randint(0, 0)
+trash_image = trash[trash_index]
+trash = pygame.image.load(trash_image)
 trash = pygame.transform.scale(trash, (60, 60))
 
 # trash parameters
@@ -74,7 +78,7 @@ while True:
     # rectangle for collision
     scotty_rect = pygame.Rect(x, y, 200, 150)
     trash_rect = pygame.Rect(trash_x, trash_y, 60, 60)
-    recycle_rect = pygame.Rect(320, 250, 200, 250)
+    recycle_bin_rect = pygame.Rect(320, 250, 200, 250)
 
     # pick up trash
     if scotty_rect.colliderect(trash_rect):
@@ -86,7 +90,7 @@ while True:
         trash_y = y - 40
 
         # drop into recycle bin
-        if scotty_rect.colliderect(recycle_rect):
+        if scotty_rect.colliderect(recycle_bin_rect):
             score += 1
             holding_trash = False
             trash_x = random.randint(0, bg_width - 60)
@@ -95,7 +99,7 @@ while True:
     # draw everything
     screen.blit(background, (0, 0))
     screen.blit(scotty, (x, y))
-    screen.blit(recycle, (320, 250))
+    screen.blit(recycle_bin, (320, 250))
     screen.blit(trash, (trash_x, trash_y))
 
     # draw score
