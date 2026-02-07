@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import angela
 
 pygame.init()
 
@@ -78,6 +79,42 @@ score = 0
 font = pygame.font.SysFont(None, 48)
 
 clock = pygame.time.Clock()
+life_state = {"lives": 3, "max_lives": 3, "invuln_frames": 0, "invuln_max": 20}
+
+ui = {
+    "screen": screen,
+    "background": background,
+    "clock": clock,
+    "font_big": pygame.font.SysFont(None, 72),
+    "font_small": pygame.font.SysFont(None, 42),
+}
+
+reset_args = {
+    "bg_width": bg_width,
+    "bg_height": bg_height,
+    "spawn_trash": spawn_trash,
+}
+
+def apply_damage_and_handle(score, life_state, ui, reset_args,
+                            x, y, holding_trash, image_name, trash, trash_x, trash_y):
+    life_state, action, payload = angela.lose_blood(life_state, score, ui, reset_args)
+
+    if action == "quit":
+        return life_state, "quit", x, y, holding_trash, score, image_name, trash, trash_x, trash_y
+
+    if action == "restart":
+        x = payload["x"]
+        y = payload["y"]
+        score = payload["score"]
+        holding_trash = payload["holding_trash"]
+        image_name = payload["image_name"]
+        trash = payload["trash"]
+        trash_x = payload["trash_x"]
+        trash_y = payload["trash_y"]
+        return life_state, "restart", x, y, holding_trash, score, image_name, trash, trash_x, trash_y
+
+    return life_state, "continue", x, y, holding_trash, score, image_name, trash, trash_x, trash_y
+
 
 # position of bins
 ground_y = bg_height - 40
@@ -98,6 +135,8 @@ while True:
             sys.exit()
 
     keys = pygame.key.get_pressed()
+    if life_state["invuln_frames"] > 0:
+        life_state["invuln_frames"] -= 1
 
     if keys[pygame.K_w]:
         y -= speed
@@ -112,9 +151,27 @@ while True:
     if not holding_trash:
         trash_y += trash_speed
 
-    # reset if missed
+
     if trash_y > bg_height:
+        life_state, action, payload = angela.lose_blood(life_state, score, ui, reset_args)
+
+        if action == "quit":
+            pygame.quit()
+            sys.exit()
+
+        if action == "restart":
+            x = payload["x"]; y = payload["y"]
+            score = payload["score"]
+            holding_trash = payload["holding_trash"]
+            image_name = payload["image_name"]
+            trash = payload["trash"]
+            trash_x = payload["trash_x"]
+            trash_y = payload["trash_y"]
+            continue
+
+    # continue normally
         image_name, trash, trash_x, trash_y = spawn_trash()
+
     
     # rectangle for collision
     scotty_rect = pygame.Rect(x, y, 120, 80)
@@ -139,24 +196,58 @@ while True:
         if scotty_rect.colliderect(recycle_bin_rect):
             if trash_type == "recycle":
                 score += 1
+            else:
+                life_state, action, x, y, holding_trash, score, image_name, trash, trash_x, trash_y = apply_damage_and_handle(score, life_state, ui, reset_args, x, y, holding_trash, image_name, trash, trash_x, trash_y)
+
+                if action == "quit":
+                    pygame.quit()
+                    sys.exit()
+                if action == "restart":
+                    continue
+
             holding_trash = False
             image_name, trash, trash_x, trash_y = spawn_trash()
 
         if scotty_rect.colliderect(hazardous_bin_rect):
             if trash_type == "hazardous":
                 score += 1
+            else:
+                life_state, action, x, y, holding_trash, score, image_name, trash, trash_x, trash_y = apply_damage_and_handle(score, life_state, ui, reset_args, x, y, holding_trash, image_name, trash, trash_x, trash_y)
+
+                if action == "quit":
+                    pygame.quit()
+                    sys.exit()
+                if action == "restart":
+                    continue
+
             holding_trash = False
             image_name, trash, trash_x, trash_y = spawn_trash()
 
         if scotty_rect.colliderect(compost_bin_rect):
             if trash_type == "compost":
                 score += 1
+            else:
+                life_state, action, x, y, holding_trash, score, image_name, trash, trash_x, trash_y = apply_damage_and_handle(score, life_state, ui, reset_args, x, y, holding_trash, image_name, trash, trash_x, trash_y)
+
+                if action == "quit":
+                    pygame.quit()
+                    sys.exit()
+                if action == "restart":
+                    continue
             holding_trash = False
             image_name, trash, trash_x, trash_y = spawn_trash()
 
         if scotty_rect.colliderect(landfill_bin_rect):
             if trash_type == "landfill":
                 score += 1
+            else:
+                life_state, action, x, y, holding_trash, score, image_name, trash, trash_x, trash_y = apply_damage_and_handle(score, life_state, ui, reset_args, x, y, holding_trash, image_name, trash, trash_x, trash_y)
+
+                if action == "quit":
+                    pygame.quit()
+                    sys.exit()
+                if action == "restart":
+                    continue
             holding_trash = False
             image_name, trash, trash_x, trash_y = spawn_trash()
 
@@ -172,6 +263,9 @@ while True:
     # draw score
     score_text = font.render(f"Score: {score}", True, (0, 0, 0))
     screen.blit(score_text, (20, 20))
+    lives_text = font.render(f"Lives: {life_state['lives']}", True, (0, 0, 0))
+    screen.blit(lives_text, (20, 60))
+
     
     pygame.display.update()
     clock.tick(60)
