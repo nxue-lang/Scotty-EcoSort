@@ -21,19 +21,25 @@ speed = 7
 
 # recycle bin image
 recycle_bin = pygame.image.load("recycle_bin.webp")
-recycle_bin = pygame.transform.scale(recycle_bin, (200, 300))
+recycle_bin = pygame.transform.scale(recycle_bin, (200, 250))
 
 # hazardous bin image
 hazardous_bin = pygame.image.load("hazardous.png")
-hazardous_bin = pygame.transform.scale(hazardous_bin, (180, 200))
+hazardous_bin = pygame.transform.scale(hazardous_bin, (180, 280))
+
+# kitchen bin image
+#compost_bin = pygame.image.load()
+
+# landfill bin image
+#landfill_bin = pygame.image.load()
 
 # category
-recycle_trash = ["SodaCan.jpg", "WaterBottle.jpg"]
-kitchen_trash = ["apple.jpg", "used_tissue.jpg", "banana_peel.webp"]
+recycle_trash = ["SodaCan.jpg", "WaterBottle.jpg", "GlassBottle.webp", "Newspaper.jpg", "Boxes.jpg"]
+compost_trash = ["apple.jpg", "used_tissue.jpg", "banana_peel.webp", "bread.png", "egg.png"]
 hazardous_trash = ["battery.png", "charger.png", "screen.png", "paint.png", "pills.png"]
 landfill_trash = ["CandyWrapper.jpg", "PlasticBag.jpg", "clothing.jpg", "ChipBag.jpg", "used_gloves.webp"]
 
-trash_list = recycle_trash + kitchen_trash + hazardous_trash + landfill_trash
+trash_list = recycle_trash + compost_trash + hazardous_trash + landfill_trash
 
 # spawn random trash and location
 def spawn_trash():
@@ -120,6 +126,7 @@ while True:
                 score += 1
             holding_trash = False
             image_name, trash, trash_x, trash_y = spawn_trash()
+
 
 
     # draw everything
