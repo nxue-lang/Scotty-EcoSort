@@ -10,6 +10,7 @@ bg_width, bg_height = background.get_size()
 screen = pygame.display.set_mode((bg_width, bg_height))
 pygame.display.set_caption("Garbage Classification")
 
+
 # scotty dog image
 scotty = pygame.image.load("scotty.webp")
 scotty = pygame.transform.scale(scotty, (200, 150))
@@ -78,6 +79,18 @@ font = pygame.font.SysFont(None, 48)
 
 clock = pygame.time.Clock()
 
+# position of bins
+ground_y = bg_height - 40
+recycle_x = 200
+hazardous_x = 420
+compost_x = 640
+landfill_x = 860
+
+recycle_y = ground_y - recycle_height
+hazardous_y = ground_y - hazardous_height
+compost_y = ground_y - compost_height
+landfill_y = ground_y - landfill_height
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -104,15 +117,11 @@ while True:
         image_name, trash, trash_x, trash_y = spawn_trash()
     
     # rectangle for collision
-    scotty_rect = pygame.Rect(x, y, 200, 150)
-    trash_rect = pygame.Rect(trash_x, trash_y, 60, 60)
-    recycle_x, recycle_y = 320, 250
+    scotty_rect = pygame.Rect(x, y, 120, 80)
+    trash_rect = pygame.Rect(trash_x, trash_y, 30, 30)
     recycle_bin_rect = pygame.Rect(recycle_x, recycle_y, recycle_width, recycle_height)
-    hazardous_x, hazardous_y = 420, 270
     hazardous_bin_rect = pygame.Rect(hazardous_x, hazardous_y, hazardous_width, hazardous_height)
-    compost_x, compost_y = 620, 270
     compost_bin_rect = pygame.Rect(compost_x, compost_y, compost_width, compost_height)
-    landfill_x, landfill_y = 820, 270
     landfill_bin_rect = pygame.Rect(landfill_x, landfill_y, landfill_width, landfill_height)
 
     # pick up trash
