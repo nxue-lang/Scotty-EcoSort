@@ -53,7 +53,7 @@ def spawn_trash():
 def get_category(name):
     if name in recycle_trash:
         return "recycle"
-    if name in kitchen_trash:
+    if name in compost_trash:
         return "kitchen"
     if name in hazardous_trash:
         return "hazardous"
