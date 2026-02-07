@@ -28,7 +28,7 @@ recycle_bin = pygame.transform.scale(recycle_bin, (recycle_width, recycle_height
 
 # hazardous bin image
 hazardous_bin = pygame.image.load("hazardous.png")
-hazardous_width, hazardous_height = 150, 250
+hazardous_width, hazardous_height = 130, 230
 hazardous_bin = pygame.transform.scale(hazardous_bin, (hazardous_width, hazardous_height))
 
 # compost bin image
@@ -118,13 +118,13 @@ def apply_damage_and_handle(score, life_state, ui, reset_args,
 
 # position of bins
 ground_y = bg_height - 40
-recycle_x = 200
-hazardous_x = 420
-compost_x = 640
-landfill_x = 860
+recycle_x = 320
+hazardous_x = 540
+compost_x = 760
+landfill_x = 980
 
 recycle_y = ground_y - recycle_height
-hazardous_y = ground_y - hazardous_height
+hazardous_y = ground_y - hazardous_height - 10
 compost_y = ground_y - compost_height
 landfill_y = ground_y - landfill_height
 
