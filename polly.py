@@ -32,6 +32,7 @@ def wrap_text(text, font, max_width):
     return lines
 
 
+
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Garbage Classification")
@@ -54,7 +55,7 @@ description = [
 
 bg_image = pygame.image.load("startingbackground.jpg").convert_alpha()
 bg_image = pygame.transform.scale(bg_image, (WIDTH, HEIGHT))
-bg_image.set_alpha(128)
+
 
 #the spinning Garbage bins
 recycle_img = pygame.image.load("recycle_bin.webp").convert_alpha()
@@ -65,7 +66,7 @@ compost_img = pygame.image.load("compost_bin.png").convert_alpha()
 #create an array of garbage bins
 BIN_SIZE = 100
 BIN_MARGIN = 20
-ROTATION_SPEED = 50  # degrees per frame
+ROTATION_SPEED = 40  # degrees per frame
 
 bins = [
     {
@@ -139,10 +140,13 @@ while running:
                 sys.exit()
 
     screen.blit(bg_image, (0, 0))
+    fade_overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+    fade_overlay.fill((255, 255, 255, 120))  # (R, G, B, alpha)
+    screen.blit(fade_overlay, (0, 0))
     # Draw title
     screen.blit(
     title,
-    (WIDTH // 2 - title.get_width() // 2, 80)
+    (WIDTH // 2 - title.get_width() // 2, 130)
     )
 
 # Draw description text (multiple lines)
