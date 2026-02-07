@@ -90,7 +90,7 @@ while True:
         trash_y = y - 40
 
         # drop into recycle bin
-        if scotty_rect.colliderect(recycle_rect):
+        if scotty_rect.colliderect(recycle_bin_rect):
             score += 1
             holding_trash = False
             trash_x = random.randint(0, bg_width - 60)
