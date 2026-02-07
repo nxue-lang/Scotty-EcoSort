@@ -21,14 +21,15 @@ y = bg_height // 2
 speed = 5
 
 # recycle bin image
-recycle = pygame.image.load("recycle.webp").convert()
-recycle.set_colorkey((255, 255, 255))
-recycle = pygame.transform.scale(recycle, (200, 250))
+recycle_bin = pygame.image.load("recycle.webp").convert()
+recycle_bin.set_colorkey((255, 255, 255))
+recycle_bin = pygame.transform.scale(recycle_bin, (180, 200))
 
 # trash images
 trash = ["apple.jpg"]
-index = random.randint(0, 0)
-trash = pygame.image.load(trash[index]).convert()
+trash_index = random.randint(0, 0)
+trash_image = trash[trash_index]
+trash = pygame.image.load(trash_image).convert()
 trash.set_colorkey((255, 255, 255))
 trash = pygame.transform.scale(trash, (60, 60))
 
@@ -36,6 +37,12 @@ trash = pygame.transform.scale(trash, (60, 60))
 trash_x = random.randint(0, bg_width - 60)
 trash_y = -60
 trash_speed = 4
+
+# category
+recycle_trash = ["coke_can.jpg", "water_bottle.jpg"]
+kitchen_trash = ["apple.jpg", "used_tissue.jpg", "abp.jpg"]
+hazardous_trash = ["battery.jpg", "chargers.jpg", "computer_screen.jpg", "paint,jpg"]
+landfill_trash = ["candy.wrap.jpg", "plastic_bag.jpg", "clothing.jpg"]
 
 # other
 holding_trash = False
@@ -74,7 +81,7 @@ while True:
     # rectangle for collision
     scotty_rect = pygame.Rect(x, y, 200, 150)
     trash_rect = pygame.Rect(trash_x, trash_y, 60, 60)
-    recycle_rect = pygame.Rect(320, 250, 200, 250)
+    recycle_bin_rect = pygame.Rect(320, 250, 200, 250)
 
     # pick up trash
     if scotty_rect.colliderect(trash_rect):
@@ -95,7 +102,7 @@ while True:
     # draw everything
     screen.blit(background, (0, 0))
     screen.blit(scotty, (x, y))
-    screen.blit(recycle, (320, 250))
+    screen.blit(recycle_bin, (320, 250))
     screen.blit(trash, (trash_x, trash_y))
 
     # draw score
