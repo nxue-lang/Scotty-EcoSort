@@ -56,7 +56,8 @@ def spawn_trash():
     img = pygame.transform.scale(img, (100, 100))
     x = random.randint(0, bg_width - 60)
     y = -60
-    return image_name, img, x, y
+    dx = random.choice([-2, -1, 1, 2])
+    return image_name, img, x, y, dx
 
 def get_category(name):
     if name in recycle_trash:
@@ -69,8 +70,9 @@ def get_category(name):
         return "landfill"
 
 # trash parameters
-image_name, trash, trash_x, trash_y = spawn_trash()
+image_name, trash, trash_x, trash_y, trash_dx = spawn_trash()
 trash_speed = 5
+trash_dx = random.choice([-2, -1, 1, 2])
 
 # other
 holding_trash = False
@@ -119,7 +121,7 @@ def apply_damage_and_handle(score, life_state, ui, reset_args,
 # position of bins
 ground_y = bg_height - 40
 recycle_x = 320
-hazardous_x = 540
+hazardous_x = 560
 compost_x = 760
 landfill_x = 980
 
@@ -150,7 +152,9 @@ while True:
     #trash falls
     if not holding_trash:
         trash_y += trash_speed
-
+        trash_x += trash_dx
+        if trash_x < 0 or trash_x > bg_width - 70:
+            trash_dx *= -1
 
     if trash_y > bg_height:
         life_state, action, payload = angela.lose_blood(life_state, score, ui, reset_args)
@@ -170,7 +174,7 @@ while True:
             continue
 
         # continue normally
-        image_name, trash, trash_x, trash_y = spawn_trash()
+        image_name, trash, trash_x, trash_y, trast_dx = spawn_trash()
 
     
     # rectangle for collision
@@ -206,7 +210,7 @@ while True:
                     continue
 
             holding_trash = False
-            image_name, trash, trash_x, trash_y = spawn_trash()
+            image_name, trash, trash_x, trash_y, trash_dx = spawn_trash()
 
         if scotty_rect.colliderect(hazardous_bin_rect):
             if trash_type == "hazardous":
@@ -221,7 +225,7 @@ while True:
                     continue
 
             holding_trash = False
-            image_name, trash, trash_x, trash_y = spawn_trash()
+            image_name, trash, trash_x, trash_y, trash_dx = spawn_trash()
 
         if scotty_rect.colliderect(compost_bin_rect):
             if trash_type == "compost":
@@ -235,7 +239,7 @@ while True:
                 if action == "restart":
                     continue
             holding_trash = False
-            image_name, trash, trash_x, trash_y = spawn_trash()
+            image_name, trash, trash_x, trash_y, trash_dx = spawn_trash()
 
         if scotty_rect.colliderect(landfill_bin_rect):
             if trash_type == "landfill":
@@ -249,7 +253,7 @@ while True:
                 if action == "restart":
                     continue
             holding_trash = False
-            image_name, trash, trash_x, trash_y = spawn_trash()
+            image_name, trash, trash_x, trash_y, trash_dx = spawn_trash()
 
     # draw everything
     screen.blit(background, (0, 0))
