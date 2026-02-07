@@ -1,106 +1,104 @@
 import pygame
 import sys
-import random
 
-pygame.init()
+def lose_blood(life_state, score, ui, reset_args):
+    # cooldown protection to avoid losing multiple hearts instantly
+    if life_state["invuln_frames"] > 0:
+        return life_state, "continue", None
 
-# background image
-background = pygame.image.load("background.jpg")
-bg_width, bg_height = background.get_size()
-screen = pygame.display.set_mode((bg_width, bg_height))
-pygame.display.set_caption("Garbage Classification")
+    life_state["lives"] = max(0, life_state["lives"] - 1)
+    life_state["invuln_frames"] = life_state["invuln_max"]
 
-# scotty dog image
-scotty = pygame.image.load("scotty.webp").convert()
-scotty.set_colorkey((255, 255, 255))
-scotty = pygame.transform.scale(scotty, (200, 150))
+    if life_state["lives"] <= 0:
+        action = game_over_page(score, ui)
+        if action == "quit":
+            return life_state, "quit", None
 
-#scotty parameters
-x = bg_width // 2
-y = bg_height // 2
-speed = 5
+        # restart chosen -> reset EVERYTHING
+        reset_payload = reset_game(reset_args)
+        life_state["lives"] = life_state["max_lives"]
+        life_state["invuln_frames"] = 0
+        return life_state, "restart", reset_payload
 
-# recycle bin image
-recycle = pygame.image.load("recycle.webp").convert()
-recycle.set_colorkey((255, 255, 255))
-recycle = pygame.transform.scale(recycle, (200, 250))
+    return life_state, "continue", None
 
-# trash images
-trash = ["apple.jpg"]
-index = random.randint(0, 0)
-trash = pygame.image.load(trash[index]).convert()
-trash.set_colorkey((255, 255, 255))
-trash = pygame.transform.scale(trash, (60, 60))
+def game_over_page(score, ui):
+    screen = ui["screen"]
+    background = ui["background"]
+    clock = ui["clock"]
+    font_big = ui["font_big"]
+    font_small = ui["font_small"]
 
-# trash parameters
-trash_x = random.randint(0, bg_width - 60)
-trash_y = -60
-trash_speed = 4
+    w, h = screen.get_width(), screen.get_height()
 
-# other
-holding_trash = False
-score = 0
+    btn_w, btn_h = 220, 70
+    restart_rect = pygame.Rect(w // 2 - btn_w - 20, 330, btn_w, btn_h)
+    quit_rect    = pygame.Rect(w // 2 + 20,       330, btn_w, btn_h)
 
-font = pygame.font.SysFont(None, 48)
+    def draw_button(rect, text, mouse_pos, mouse_clicked):
+        hovered = rect.collidepoint(mouse_pos)
+        pygame.draw.rect(screen, (230, 230, 230), rect)
+        pygame.draw.rect(screen, (0, 0, 0), rect, 4 if hovered else 2)
+        label = font_small.render(text, True, (0, 0, 0))
+        screen.blit(label, (rect.centerx - label.get_width() // 2,
+                            rect.centery - label.get_height() // 2))
+        return hovered and mouse_clicked
 
-clock = pygame.time.Clock()
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_clicked = False
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return "quit"
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_clicked = True
 
-    keys = pygame.key.get_pressed()
+        screen.blit(background, (0, 0))
 
-    if keys[pygame.K_w]:
-        y -= speed
-    if keys[pygame.K_s]:
-        y += speed
-    if keys[pygame.K_a]:
-        x -= speed
-    if keys[pygame.K_d]:
-        x += speed
+        # overlay to make text readable
+        overlay = pygame.Surface((w, h), pygame.SRCALPHA)
+        overlay.fill((255, 255, 255, 200))
+        screen.blit(overlay, (0, 0))
 
-    #trash falls
-    if not holding_trash:
-        trash_y += trash_speed
+        title = font_big.render("GAME OVER", True, (0, 0, 0))
+        screen.blit(title, (w // 2 - title.get_width() // 2, 140))
 
-    # reset if missed
-    if trash_y > bg_height:
-        trash_x = random.randint(0, bg_width - 60)
-        trash_y = -60
-    
-    # rectangle for collision
-    scotty_rect = pygame.Rect(x, y, 200, 150)
-    trash_rect = pygame.Rect(trash_x, trash_y, 60, 60)
-    recycle_rect = pygame.Rect(320, 250, 200, 250)
+        final = font_small.render(f"Final Score: {score}", True, (0, 0, 0))
+        screen.blit(final, (w // 2 - final.get_width() // 2, 220))
 
-    # pick up trash
-    if scotty_rect.colliderect(trash_rect):
-        holding_trash = True
+        if draw_button(restart_rect, "Restart", mouse_pos, mouse_clicked):
+            return "restart"
+        if draw_button(quit_rect, "Quit", mouse_pos, mouse_clicked):
+            return "quit"
 
-    # if holding, trash follows scotty
-    if holding_trash:
-        trash_x = x + 70
-        trash_y = y - 40
+        pygame.display.update()
+        clock.tick(60)
 
-        # drop into recycle bin
-        if scotty_rect.colliderect(recycle_rect):
-            score += 1
-            holding_trash = False
-            trash_x = random.randint(0, bg_width - 60)
-            trash_y = -60
+def reset_game(reset_args):
+    bg_width = reset_args["bg_width"]
+    bg_height = reset_args["bg_height"]
+    spawn_trash = reset_args["spawn_trash"]
 
-    # draw everything
-    screen.blit(background, (0, 0))
-    screen.blit(scotty, (x, y))
-    screen.blit(recycle, (320, 250))
-    screen.blit(trash, (trash_x, trash_y))
+    # reset player
+    x = bg_width // 2
+    y = bg_height // 2
 
-    # draw score
-    score_text = font.render(f"Score: {score}", True, (0, 0, 0))
-    screen.blit(score_text, (20, 20))
-    
-    pygame.display.update()
-    clock.tick(60)
+    # reset score and holding state
+    score = 0
+    holding_trash = False
+
+    # reset trash
+    image_name, trash, trash_x, trash_y, trash_dx = spawn_trash()
+
+    return {
+    "x": x,
+    "y": y,
+    "score": score,
+    "holding_trash": holding_trash,
+    "image_name": image_name,
+    "trash": trash,
+    "trash_x": trash_x,
+    "trash_y": trash_y,
+    "trash_dx": trash_dx,
+}
