@@ -21,17 +21,23 @@ speed = 7
 
 # recycle bin image
 recycle_bin = pygame.image.load("recycle_bin.webp")
-recycle_bin = pygame.transform.scale(recycle_bin, (200, 250))
+recycle_width, recycle_height = 200, 250
+recycle_bin = pygame.transform.scale(recycle_bin, (recycle_width, recycle_height))
 
 # hazardous bin image
 hazardous_bin = pygame.image.load("hazardous.png")
-hazardous_bin = pygame.transform.scale(hazardous_bin, (180, 280))
+hazardous_width, hazardous_height = 150, 250
+hazardous_bin = pygame.transform.scale(hazardous_bin, (hazardous_width, hazardous_height))
 
-# kitchen bin image
-#compost_bin = pygame.image.load()
+# compost bin image
+compost_bin = pygame.image.load("compost_bin.png")
+compost_width, compost_height = 180, 280
+compost_bin = pygame.transform.scale(compost_bin, (compost_width, compost_height))
 
 # landfill bin image
-#landfill_bin = pygame.image.load()
+landfill_bin = pygame.image.load("landfill_bin.jpg")
+landfill_width, landfill_height = 180, 280
+landfill_bin = pygame.transform.scale(landfill_bin, (landfill_width, landfill_height))
 
 # category
 recycle_trash = ["SodaCan.jpg", "WaterBottle.jpg", "GlassBottle.webp", "Newspaper.jpg", "Boxes.jpg"]
@@ -54,7 +60,7 @@ def get_category(name):
     if name in recycle_trash:
         return "recycle"
     if name in compost_trash:
-        return "kitchen"
+        return "compost"
     if name in hazardous_trash:
         return "hazardous"
     if name in landfill_trash:
@@ -100,8 +106,14 @@ while True:
     # rectangle for collision
     scotty_rect = pygame.Rect(x, y, 200, 150)
     trash_rect = pygame.Rect(trash_x, trash_y, 60, 60)
-    recycle_bin_rect = pygame.Rect(320, 250, 200, 250)
-    hazardous_bin_rect = pygame.Rect(420, 270, 200, 250)
+    recycle_x, recycle_y = 320, 250
+    recycle_bin_rect = pygame.Rect(recycle_x, recycle_y, recycle_width, recycle_height)
+    hazardous_x, hazardous_y = 420, 270
+    hazardous_bin_rect = pygame.Rect(hazardous_x, hazardous_y, hazardous_width, hazardous_height)
+    compost_x, compost_y = 620, 270
+    compost_bin_rect = pygame.Rect(compost_x, compost_y, compost_width, compost_height)
+    landfill_x, landfill_y = 820, 270
+    landfill_bin_rect = pygame.Rect(landfill_x, landfill_y, landfill_width, landfill_height)
 
     # pick up trash
     if scotty_rect.colliderect(trash_rect):
@@ -127,13 +139,25 @@ while True:
             holding_trash = False
             image_name, trash, trash_x, trash_y = spawn_trash()
 
+        if scotty_rect.colliderect(compost_bin_rect):
+            if trash_type == "compost":
+                score += 1
+            holding_trash = False
+            image_name, trash, trash_x, trash_y = spawn_trash()
 
+        if scotty_rect.colliderect(landfill_bin_rect):
+            if trash_type == "landfill":
+                score += 1
+            holding_trash = False
+            image_name, trash, trash_x, trash_y = spawn_trash()
 
     # draw everything
     screen.blit(background, (0, 0))
     screen.blit(scotty, (x, y))
-    screen.blit(recycle_bin, (320, 270))
-    screen.blit(hazardous_bin, (420, 270))
+    screen.blit(recycle_bin, (recycle_x, recycle_y))
+    screen.blit(hazardous_bin, (hazardous_x, hazardous_y))
+    screen.blit(compost_bin, (compost_x, compost_y))
+    screen.blit(landfill_bin, (landfill_x, landfill_y))
     screen.blit(trash, (trash_x, trash_y))
 
     # draw score
