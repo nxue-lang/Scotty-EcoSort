@@ -1,7 +1,6 @@
 import pygame
 import sys
 import random
-import angela
 
 pygame.init()
 
@@ -16,7 +15,7 @@ pygame.display.set_caption("Garbage Classification")
 scotty = pygame.image.load("scotty.webp")
 scotty = pygame.transform.scale(scotty, (200, 150))
 
-# scotty parameters
+#scotty parameters
 x = bg_width // 2
 y = bg_height // 2
 speed = 7
@@ -28,13 +27,18 @@ recycle_bin = pygame.transform.scale(recycle_bin, (recycle_width, recycle_height
 
 # hazardous bin image
 hazardous_bin = pygame.image.load("hazardous.png")
-hazardous_bin = pygame.transform.scale(hazardous_bin, (180, 280))
+hazardous_width, hazardous_height = 150, 250
+hazardous_bin = pygame.transform.scale(hazardous_bin, (hazardous_width, hazardous_height))
 
-# kitchen bin image
-#compost_bin = pygame.image.load()
+# compost bin image
+compost_bin = pygame.image.load("compost_bin.png")
+compost_width, compost_height = 180, 280
+compost_bin = pygame.transform.scale(compost_bin, (compost_width, compost_height))
 
 # landfill bin image
-#landfill_bin = pygame.image.load()
+landfill_bin = pygame.image.load("landfill_bin.jpg")
+landfill_width, landfill_height = 180, 280
+landfill_bin = pygame.transform.scale(landfill_bin, (landfill_width, landfill_height))
 
 # category
 recycle_trash = ["SodaCan.jpg", "WaterBottle.jpg", "GlassBottle.webp", "Newspaper.jpg", "Boxes.jpg"]
@@ -49,9 +53,9 @@ def spawn_trash():
     image_name = random.choice(trash_list)
     img = pygame.image.load(image_name)
     img = pygame.transform.scale(img, (100, 100))
-    tx = random.randint(0, bg_width - 60)
-    ty = -60
-    return image_name, img, tx, ty
+    x = random.randint(0, bg_width - 60)
+    y = -60
+    return image_name, img, x, y
 
 def get_category(name):
     if name in recycle_trash:
@@ -62,7 +66,6 @@ def get_category(name):
         return "hazardous"
     if name in landfill_trash:
         return "landfill"
-    return "unknown"
 
 # trash parameters
 image_name, trash, trash_x, trash_y = spawn_trash()
@@ -73,7 +76,20 @@ holding_trash = False
 score = 0
 
 font = pygame.font.SysFont(None, 48)
+
 clock = pygame.time.Clock()
+
+# position of bins
+ground_y = bg_height - 40
+recycle_x = 200
+hazardous_x = 420
+compost_x = 640
+landfill_x = 860
+
+recycle_y = ground_y - recycle_height
+hazardous_y = ground_y - hazardous_height
+compost_y = ground_y - compost_height
+landfill_y = ground_y - landfill_height
 
 while True:
     for event in pygame.event.get():
@@ -83,11 +99,6 @@ while True:
 
     keys = pygame.key.get_pressed()
 
-    # cooldown countdown
-    if life_state["invuln_frames"] > 0:
-        life_state["invuln_frames"] -= 1
-
-    # movement
     if keys[pygame.K_w]:
         y -= speed
     if keys[pygame.K_s]:
@@ -97,36 +108,21 @@ while True:
     if keys[pygame.K_d]:
         x += speed
 
-    # trash falls
+    #trash falls
     if not holding_trash:
         trash_y += trash_speed
 
-    # MISS: call lose_blood (ONLY when missed)
+    # reset if missed
     if trash_y > bg_height:
-        life_state, action, payload = angela.lose_blood(life_state, score, ui, reset_args)
-
-        if action == "quit":
-            pygame.quit()
-            sys.exit()
-
-        if action == "restart":
-            x = payload["x"]; y = payload["y"]
-            score = payload["score"]
-            holding_trash = payload["holding_trash"]
-            image_name = payload["image_name"]
-            trash = payload["trash"]
-            trash_x = payload["trash_x"]
-            trash_y = payload["trash_y"]
-            continue
-
-        # action == "continue": respawn one new trash after miss
         image_name, trash, trash_x, trash_y = spawn_trash()
     
     # rectangle for collision
-    scotty_rect = pygame.Rect(x, y, 200, 150)
-    trash_rect = pygame.Rect(trash_x, trash_y, 60, 60)
-    recycle_bin_rect = pygame.Rect(320, 250, 200, 250)
-    hazardous_bin_rect = pygame.Rect(420, 270, 200, 250)
+    scotty_rect = pygame.Rect(x, y, 120, 80)
+    trash_rect = pygame.Rect(trash_x, trash_y, 30, 30)
+    recycle_bin_rect = pygame.Rect(recycle_x, recycle_y, recycle_width, recycle_height)
+    hazardous_bin_rect = pygame.Rect(hazardous_x, hazardous_y, hazardous_width, hazardous_height)
+    compost_bin_rect = pygame.Rect(compost_x, compost_y, compost_width, compost_height)
+    landfill_bin_rect = pygame.Rect(landfill_x, landfill_y, landfill_width, landfill_height)
 
     # pick up trash
     if scotty_rect.colliderect(trash_rect):
@@ -139,21 +135,30 @@ while True:
 
         trash_type = get_category(image_name)
 
-        # deposit recycle
+        # detect if dorp into the correct bin
         if scotty_rect.colliderect(recycle_bin_rect):
             if trash_type == "recycle":
                 score += 1
             holding_trash = False
             image_name, trash, trash_x, trash_y = spawn_trash()
 
-        # deposit hazardous
         if scotty_rect.colliderect(hazardous_bin_rect):
             if trash_type == "hazardous":
                 score += 1
             holding_trash = False
             image_name, trash, trash_x, trash_y = spawn_trash()
 
+        if scotty_rect.colliderect(compost_bin_rect):
+            if trash_type == "compost":
+                score += 1
+            holding_trash = False
+            image_name, trash, trash_x, trash_y = spawn_trash()
 
+        if scotty_rect.colliderect(landfill_bin_rect):
+            if trash_type == "landfill":
+                score += 1
+            holding_trash = False
+            image_name, trash, trash_x, trash_y = spawn_trash()
 
     # draw everything
     screen.blit(background, (0, 0))
@@ -164,11 +169,9 @@ while True:
     screen.blit(landfill_bin, (landfill_x, landfill_y))
     screen.blit(trash, (trash_x, trash_y))
 
-    # UI: score + lives
+    # draw score
     score_text = font.render(f"Score: {score}", True, (0, 0, 0))
     screen.blit(score_text, (20, 20))
-    lives_text = font.render(f"Lives: {life_state['lives']}", True, (0, 0, 0))
-    screen.blit(lives_text, (20, 60))
-
+    
     pygame.display.update()
     clock.tick(60)
