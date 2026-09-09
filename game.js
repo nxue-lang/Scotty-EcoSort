@@ -4,7 +4,7 @@ const canvas = $('game'), ctx = canvas.getContext('2d');
 const binButtons = [...document.querySelectorAll('[data-bin]')];
 const names = ['Recycle', 'Compost', 'Hazard', 'Landfill'];
 const colors = ['#1467a1', '#25733e', '#915a0b', '#49515d'];
-// Labels and shapes identify items without relying on color vision.
+// Labels and shapes identify items without relying on color vision..
 const items = [
   ['Can', 0, 0], ['Bottle', 0, 1], ['Paper', 0, 2],
   ['Apple core', 1, 3], ['Banana peel', 1, 4], ['Bread', 1, 5],
