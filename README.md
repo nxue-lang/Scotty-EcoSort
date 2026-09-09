@@ -7,6 +7,10 @@ The playable release is **14,708 bytes total, uncompressed**: `dist/index.html`
 (13,971 bytes) and `dist/sw.js` (737 bytes). It fits below both 15,000 bytes and
 15 KiB. Build tools, source files and tests are not part of the playable payload.
 
+## Play online
+
+[Play Scotty EcoSort](https://nxue-lang.github.io/Scotty-EcoSort/)
+
 ## Play
 
 - **Phone / tablet:** drag or tap the field to move, or hold the Left / Right
