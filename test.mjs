@@ -33,7 +33,7 @@ for (const [width, height] of [[304, 330], [390, 480], [752, 300], [944, 550]]) 
     assert.equal(g.run('state'), 'play');
     for (let i = 0; i < 10; i++) {
       g.run('for(let tick=0;tick<30;tick++) update(1/60);');
-      g.run(`trash = {item: items[${i}], x: player.x, y: lane() - 40, speed: 100}; update(.05);`);
+      g.run(`trash = {item: items[${i}], x: player.x, y: lane() - 40, speed: 100, vx: 0}; update(.05);`);
       assert.equal(g.run('holding'), true);
       const bin = g.run('trash.item[1]');
       assert.equal(g.element('bin' + bin).disabled, false);
@@ -50,7 +50,7 @@ test('Wrong bins cost one chance; three mistakes end the round; touch restart re
   const g = game(); g.element('start').onclick();
   for (let i = 0; i < 3; i++) {
     g.run('for(let tick=0;tick<30;tick++) update(1/60);');
-    g.run('trash = {item: items[0], x: player.x, y: lane()-40, speed:100}; update(.05); chooseBin(1); for(let i=0;i<150 && route !== -1;i++) update(1/60);');
+    g.run('trash = {item: items[0], x: player.x, y: lane()-40, speed:100, vx:0}; update(.05); chooseBin(1); for(let i=0;i<150 && route !== -1;i++) update(1/60);');
     assert.equal(g.run('lives'), 2 - i);
   }
   assert.equal(g.run('score'), 0); assert.equal(g.run('state'), 'over');
@@ -66,6 +66,9 @@ test('The animation loop spawns random falling items, detects misses and caps ba
   assert.equal(g.run('!!trash'), true);
   const y = g.run('trash.y'); g.frame(50000);
   assert.ok(g.run('trash.y') > y); assert.equal(g.run('lives'), 3);
+  g.run('trash = {item: items[0], x: w - 26, y: 0, speed: 0, vx: 100}; update(.1);');
+  assert.equal(g.run('trash.x'), g.run('w - 25'));
+  assert.equal(g.run('trash.vx'), -100);
   g.run('player.x=30; trash.x=w-30; trash.y=lane()+30; update(.016);');
   assert.equal(g.run('lives'), 2); assert.equal(g.run('trash'), null);
   const xs = g.run('Array.from({length:20},()=>{spawn(); return trash.x})');
