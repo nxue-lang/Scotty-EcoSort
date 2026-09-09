@@ -2,14 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Waste Sorting</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#a6192e">
+  <meta name="description" content="Help CMU's Scotty catch falling litter and sort it. A tiny game for touchscreens and keyboards, playable offline.">
+  <title>Scotty Sort</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="game-shell">
-    <canvas id="game" width="900" height="600" aria-label="Waste sorting game"></canvas>
-    <p class="hint">Offline game. Move with W A S D or arrow keys. Press R to restart.</p>
+  <main>
+    <header>
+      <div><small>CMU CAMPUS CLEANUP</small><h1>Scotty Sort<span>.</span></h1></div>
+      <div class="actions"><button id="pause" disabled aria-label="Pause game">Pause</button><button id="restart" aria-label="Restart game">Restart</button></div>
+    </header>
+    <section class="hud" aria-label="Game progress">
+      <div><small>SORTED</small><strong id="score">0</strong></div>
+      <p id="status" role="status">A little dog. A cleaner campus.</p>
+      <div><small>CHANCES</small><strong id="lives" aria-label="3 chances left">3 / 3</strong></div>
+    </section>
+    <section id="arena" aria-label="Game field">
+      <canvas id="game" aria-label="Drag or tap the field to move Scotty under falling litter. After a catch, tap its matching bin.">Your browser needs canvas to play this game.</canvas>
+      <div class="bins" aria-label="Choose a bin after catching litter">
+        <button data-bin="0" style="--bin:#1467a1" disabled><b>1</b>Recycle</button>
+        <button data-bin="1" style="--bin:#25733e" disabled><b>2</b>Compost</button>
+        <button data-bin="2" style="--bin:#915a0b" disabled><b>3</b>Hazard</button>
+        <button data-bin="3" style="--bin:#49515d" disabled><b>4</b>Landfill</button>
+      </div>
+      <div id="overlay">
+        <div class="card">
+          <small id="eyebrow">MEET YOUR CLEANUP CREW</small>
+          <h2 id="title">Small paws.<br>Big mission.</h2>
+          <p id="intro">Help CMU's Scotty catch falling litter.<br>Then carry it to the correct bin.</p>
+          <p id="instructions">Drag or tap to move. Tap a bin to sort.<br>Keyboard: A/D or arrows, then 1–4.</p>
+          <button id="start">Let's clean up</button>
+          <p class="note">Three misses or wrong bins end the round.</p>
+        </div>
+      </div>
+    </section>
+    <nav class="controls" aria-label="Movement controls">
+      <button id="left" aria-label="Move Scotty left">&#8592; <span>Left</span></button>
+      <p id="carry">Catch it. Carry it. Sort it.</p>
+      <button id="right" aria-label="Move Scotty right"><span>Right</span> &#8594;</button>
+    </nav>
+    <footer><span id="offline">No downloads needed to play</span></footer>
   </main>
   <script src="game.js"></script>
 </body>

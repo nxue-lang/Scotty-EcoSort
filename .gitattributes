@@ -1,2 +1,3 @@
-# Auto detect text files and perform LF normalization
-
+# Keep the measured release bytes identical on every platform.
+* text=auto
+dist/* -text
