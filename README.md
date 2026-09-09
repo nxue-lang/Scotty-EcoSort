@@ -60,8 +60,7 @@ event tests; physical iOS/Android device testing has not been performed.
 
 ## Publishing
 
-`.openai/hosting.json` points Sites at the tracked `dist` output. GitHub Pages
-uses the matching `docs` folder on `main`, so the repository needs only one
+GitHub Pages uses the `docs` folder on `main`, so the repository needs only one
 branch. In GitHub Pages settings, select **Deploy from a branch**, then choose
 `main` and `/docs`. The same two-file output can be hosted on another static
 HTTPS host if needed.
