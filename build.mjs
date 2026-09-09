@@ -19,9 +19,11 @@ const sw = (await minify(read('sw.js').replace('scotty-sort-v1', 'scotty-sort-' 
 new Script(sw);
 const total = Buffer.byteLength(html) + Buffer.byteLength(sw);
 if (total >= 15000) throw new Error('Game exceeds the strict 15,000-byte limit: ' + total);
-mkdirSync(new URL('dist/', import.meta.url), {recursive: true});
-writeFileSync(new URL('dist/index.html', import.meta.url), html);
-writeFileSync(new URL('dist/sw.js', import.meta.url), sw);
+for (const directory of ['dist', 'docs']) {
+  mkdirSync(new URL(directory + '/', import.meta.url), {recursive: true});
+  writeFileSync(new URL(directory + '/index.html', import.meta.url), html);
+  writeFileSync(new URL(directory + '/sw.js', import.meta.url), sw);
+}
 const files = readdirSync(new URL('dist/', import.meta.url));
 if (files.some(file => !['index.html', 'sw.js'].includes(file))) throw new Error('Unexpected assets in dist; check the full payload size.');
 const measured = files.reduce((sum, file) => sum + statSync(new URL('dist/' + file, import.meta.url)).size, 0);

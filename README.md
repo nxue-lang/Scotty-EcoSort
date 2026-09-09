@@ -1,8 +1,8 @@
 # Scotty Sort
 
 Help CMU's Scotty catch randomly falling litter, carry it to a bin, and sort it.
-The playable release is **14,931 bytes total, uncompressed**: `dist/index.html`
-(14,194 bytes) and `dist/sw.js` (737 bytes). It fits below both 15,000 bytes and
+The playable release is **14,708 bytes total, uncompressed**: `dist/index.html`
+(13,971 bytes) and `dist/sw.js` (737 bytes). It fits below both 15,000 bytes and
 15 KiB. Build tools, source files and tests are not part of the playable payload.
 
 ## Play
@@ -60,6 +60,8 @@ event tests; physical iOS/Android device testing has not been performed.
 
 ## Publishing
 
-`.openai/hosting.json` points Sites at the tracked `dist` output. Deploy that
-validated output with public access for anyone-with-the-link play. The same
-two-file output can be hosted on another static HTTPS host if needed.
+`.openai/hosting.json` points Sites at the tracked `dist` output. GitHub Pages
+uses the matching `docs` folder on `main`, so the repository needs only one
+branch. In GitHub Pages settings, select **Deploy from a branch**, then choose
+`main` and `/docs`. The same two-file output can be hosted on another static
+HTTPS host if needed.
