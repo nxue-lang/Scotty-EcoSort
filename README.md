@@ -21,8 +21,10 @@ The playable release is **14,708 bytes total, uncompressed**: `dist/index.html`
 - Recycle: cans, bottles, paper. Compost: apple cores, banana peels, bread.
   Hazard: batteries, paint. Landfill: wrappers, chip bags.
 
-##Demo Game Play 
-<img width="1968" height="1588" alt="4E5B69AE-3D53-466A-BD51-3328E680969E_1_102_o" src="https://github.com/user-attachments/assets/977e241a-de6a-4d8e-846b-e53f19fb884c" />
+## Demo Game Play 
+
+<img width="1017" height="752" alt="image" src="https://github.com/user-attachments/assets/781783be-079c-4c5b-bff4-1204e44e50c7" />
+
 
 
 ## Offline and sharing
