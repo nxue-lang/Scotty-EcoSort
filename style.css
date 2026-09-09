@@ -1,0 +1,33 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  background: #dfeade;
+  color: #1f2924;
+  font-family: Arial, sans-serif;
+}
+
+.game-shell {
+  width: min(96vw, 900px);
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  background: #edf5ea;
+  box-shadow: 0 8px 28px #0003;
+  touch-action: none;
+}
+
+.hint {
+  margin: 8px 0 0;
+  color: #59635d;
+  font-size: 13px;
+  text-align: center;
+}
