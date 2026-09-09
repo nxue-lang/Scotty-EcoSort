@@ -1,6 +1,11 @@
 # Scotty Sort
 
 Help CMU's Scotty catch randomly falling litter, carry it to a bin, and sort it.
+
+## Play online
+
+[Play Scotty Sort](https://nxue-lang.github.io/Waste-Sorting_Game/)
+
 The playable release is **14,708 bytes total, uncompressed**: `dist/index.html`
 (13,971 bytes) and `dist/sw.js` (737 bytes). It fits below both 15,000 bytes and
 15 KiB. Build tools, source files and tests are not part of the playable payload.
