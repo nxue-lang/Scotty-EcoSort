@@ -6,12 +6,13 @@ import {minify} from 'terser';
 const read = path => readFileSync(new URL(path, import.meta.url), 'utf8');
 // Preserve JS newlines for automatic semicolons.
 const compact = source => source.split(/\r?\n/).map(line => line.trim()).filter(line => line && !line.startsWith('//')).join('\n');
+const compactCss = source => compact(source).replace(/;}/g, '}');
 const js = read('game.js'), css = read('style.css');
 new Script(js);
 const packed = await minify(js, {toplevel: true, compress: {passes: 3}, format: {comments: false}});
 const html = compact(read('index.html'))
   .replace(/>\s+</g, '><')
-  .replace('<link rel="stylesheet" href="style.css">', '<style>' + compact(css) + '</style>')
+  .replace('<link rel="stylesheet" href="style.css">', '<style>' + compactCss(css) + '</style>')
   .replace('<script src="game.js"></script>', '<script>' + packed.code + '</script>');
 const hash = createHash('sha256').update(html).digest('hex').slice(0, 12);
 const sw = (await minify(read('sw.js').replace('scotty-sort-v1', 'scotty-sort-' + hash), {toplevel: true})).code;
