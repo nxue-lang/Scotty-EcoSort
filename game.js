@@ -61,10 +61,20 @@ function pause() {
 }
 function spawn() {
   const item = items[Math.floor(Math.random() * items.length)];
-  trash = {item, x: 30 + Math.random() * (w - 60), y: -26,
-    speed: (lane() + 26) / Math.max(2.2, 4.4 - score * .07)};
+  const horizontalSpeed = 70 + Math.random() * 90;
+  const vx = (Math.random() < 0.5 ? -1 : 1) * horizontalSpeed;
+
+  trash = {
+    item,
+    x: 30 + Math.random() * (w - 60),
+    y: -26,
+    speed: (lane() + 26) / Math.max(1.5 , 2 - score * .07),
+    vx: vx
+  };
+
   status('Catch the ' + item[0].toLowerCase() + '!');
 }
+
 function finish(correct, text) {
   if (correct) score++; else lives--;
   feedback = correct ? '+1  Sorted!' : text; flash = 1.6;
@@ -106,6 +116,16 @@ function update(dt) {
   if (!trash) { delay -= dt; if (delay <= 0) spawn(); return; }
   const before = trash.y;
   trash.y += trash.speed * dt;
+  trash.x += trash.vx * dt;
+
+  // Bounce from the left and right sides.
+  if (trash.x < 25) {
+    trash.x = 25;
+    trash.vx = Math.abs(trash.vx);
+  } else if (trash.x > w - 25) {
+    trash.x = w - 25;
+    trash.vx = -Math.abs(trash.vx);
+  }
   // Swept vertical collision prevents fast items skipping through Scotty.
   if (Math.abs(trash.x - player.x) < 36 && before < player.y + 12 && trash.y >= player.y - 39) {
     holding = true; target = null; status('Caught ' + trash.item[0].toLowerCase() + '! Choose a bin.'); hud();
